@@ -1,0 +1,22 @@
+#start the server
+kvm -smp 2 -m 1500 -netdev user,id=mynet0,hostfwd=tcp::8022-:22,hostfwd=tcp::8090-:80 -device virtio-net-pci,netdev=mynet0 -drive file=ubuntu-core-16-amd64.img,format=raw 
+
+##connect
+ssh stela2502@localhost -p 8022 # or use your ubuntu id ;-)
+
+##on client: 
+
+## first time:
+sudo snap install classic --edge --devmode
+git clone https://github.com/stela2502/SCExV_snap.git
+
+## every time
+
+sudo classic
+cd SCExV_snap
+git pull
+
+snapcraft | grep -v "Ignoring already existing file"
+
+vi snap/snapcraft.yaml
+
