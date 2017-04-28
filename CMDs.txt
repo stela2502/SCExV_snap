@@ -16,7 +16,8 @@ sudo classic
 cd SCExV_snap
 git pull
 
-snapcraft | grep -v "Ignoring already existing file"
+# this has to be sudo'ed as the perl and R libs need to go to the root directories, not the personal ones.
+sudo snapcraft | grep -v "Ignoring already existing file"
 
 vi snap/snapcraft.yaml
 

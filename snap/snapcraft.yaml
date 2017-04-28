@@ -17,27 +17,24 @@ parts:
   rfclust:
     plugin: make
     prepare: |
+      sudo apt install --yes software-properties-common apt-transport-https
       sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
       sudo add-apt-repository 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu xenial/'
       sudo apt-get update
-      sudo apt-get install --yes r-base r-cran-randomforest r-cran-survival r-cran-cluster r-cran-hmisc r-cran-mass r-cran-rcurl libcurl4-gnutls-dev libgit2-dev zlib1g-dev libssl-dev gfortran 
+      sudo apt-get install --yes r-base r-cran-randomforest r-cran-survival r-cran-cluster r-cran-hmisc r-cran-mass r-cran-rcurl libcurl4-gnutls-dev libgit2-dev zlib1g-dev libssl-dev gfortran libx32quadmath0 libblas-dev liblapack-dev libpcre3 libpcre3-dev libatlas-base-dev liblzma-dev libbz2-dev 
     source: https://github.com/stela2502/RFclust.SGE.git
-#  rscexv:
-#    plugin: make
-#    after: [rfclust]
-#    stage-packages:
-#      - libcurl4-openssl-dev
-#      - libgit2-dev
-#      - zlib1g-dev
+  rscexv:
+    plugin: make
+    after: [rfclust]
+#   prepare: |
+    source: https://github.com/stela2502/Rscexv.git
+#  zifa:
+#    plugin: python
 #    prepare: |
-#    source: https://github.com/stela2502/Rscexv.git
-##  zifa:
-##    plugin: python
-##    prepare: |
-##         export LC_ALL="en_US.UTF-8"
-##         export LC_CTYPE="en_US.UTF-8"
-##         sudo dpkg-reconfigure locales
-##    source: https://github.com/epierson9/ZIFA.git
+#         export LC_ALL="en_US.UTF-8"
+#         export LC_CTYPE="en_US.UTF-8"
+#         sudo dpkg-reconfigure locales
+#    source: https://github.com/epierson9/ZIFA.git
 #  scexv:
 #    after: [stefanslibs]
 #    stage-packages:
