@@ -1,0 +1,111 @@
+name: scexv 
+version: '2.0' # just for humans, typically '1.2+git' or '1.3.2'
+summary: ScExV is a web platform for the analysis of FLUIDIGM qPCR data. # 79 char long summary
+description: |
+  SCExV is a complex tool for the analysis of qPCR data and especially equiped for the FLUIDIGM Biomark platform.  The version 2 of the software has gained several analysis options like the MDS function DDRTree or randome forest clustering of the data.
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+
+parts:
+  stefanslibs:
+    stage-packages:
+         - pdl
+    plugin: make
+    source: https://github.com/stela2502/Stefans_Lib_Esentials.git
+  rfclust:
+    plugin: make
+    stage-packages:
+      - libcurl4-openssl-dev
+      - libgit2-dev
+      - zlib1g-dev
+    prepare: |
+      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+      sudo add-apt-repository 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu xenial/'
+      sudo apt-get update
+      sudo apt-get install r-base
+    source: https://github.com/stela2502/RFclust.SGE.git
+  rscexv:
+    plugin: make
+    stage-packages:
+      - libcurl4-openssl-dev
+      - libgit2-dev
+      - zlib1g-dev
+    prepare: |
+      sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+      sudo add-apt-repository 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu xenial/'
+      sudo apt-get update
+      sudo apt-get install r-base
+    source: https://github.com/stela2502/Rscexv.git
+#  zifa:
+#    plugin: python
+#    prepare: |
+#         export LC_ALL="en_US.UTF-8"
+#         export LC_CTYPE="en_US.UTF-8"
+#         sudo dpkg-reconfigure locales
+#    source: https://github.com/epierson9/ZIFA.git
+  scexv:
+    stage-packages:
+      - dos2unix
+      - cpanminus
+      - libcatalyst-controller-actionrole-perl
+      - libcatalyst-controller-formbuilder-perl
+      - libcatalyst-modules-extra-perl
+      - libcatalyst-modules-perl
+      - libcatalyst-perl
+      - libcatalyst-plugin-authentication-perl
+      - libcatalyst-plugin-configloader-perl
+      - libcatalyst-plugin-session-perl
+      - libcatalyst-plugin-session-state-cookie-perl
+      - libcatalyst-plugin-session-store-file-perl
+      - libcatalyst-plugin-stacktrace-perl
+      - libcgi-fast-perl
+      - libclass-load-perl
+      - libclass-load-xs-perl
+      - libcpanplus-perl
+      - libconfig-general-perl
+      - libdatetime-perl
+      - libdata-dmp-perl
+      - libfile-slurp-perl
+      - libfile-type-perl
+      - libfile-find-rule-perl
+      - libfindbin-libs-perl
+      - libhttp-request-params-perl
+      - libimport-into-perl
+      - libmime-lite-perl
+      - libmime-types-perl
+      - libmodule-build-perl
+      - libmodule-runtime-perl
+      - libmoose-perl
+      - libmoosex-attribute-chained-perl
+      - libmoosex-types-common-perl
+      - libmoosex-types-path-class-perl
+      - libmro-compat-perl
+      - libnamespace-autoclean-perl
+      - libpackage-stash-perl
+      - libpackage-stash-xs-perl
+      - libplack-perl
+      - librecommended-perl
+      - libsub-exporter-perl
+      - libtest-exception-perl
+      - libtest-fatal-perl
+      - libtest-most-perl
+      - libtest-useallmodules-perl
+      - liburi-perl
+      - libyaml-perl
+      - nginx
+    plugin: make
+    prepare: |
+      sudo apt install cpanminus libmoose-perl libplack-perl libcatalyst-perl
+      cpanm Sub::Uplevel 
+      cpanm Test::Fatal
+      cpanm Pod::Coverage
+      cpanm Data::OptList
+      cpanm Test::Exception
+      cpanm Class::Load
+      cpanm namespace::autoclean
+      cpanm Catalyst::Action::REST
+      cpanm HTTP::Request
+      cpanm Moose
+      cpanm Catalyst::Runtime
+#      perl Makefile.PL --defaultdeps
+    source: https://github.com/stela2502/SCExV.git
