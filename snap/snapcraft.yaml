@@ -55,5 +55,36 @@ parts:
       apt-get install --yes dos2unix
       ( cd SCExV && perl Makefile.PL --defaultdeps )
     source: https://github.com/stela2502/SCExV.git
-    install:
+    install: |
       rm $SNAPCRAFT_PART_INSTALL/usr/local/lib/x86_64-linux-gnu/perl/5.22.1/perllocal.pod
+      mkdir -p $SNAPCRAFT_PART_INSTALL/SCExV/2_0/
+      perl -I $SNAPCRAFT_PART_INSTALL/../../stefanslibs/build/Stefans_Libs_Essentials/lib -I $SNAPCRAFT_PART_INSTALL/../build/SCExV/lib $SNAPCRAFT_PART_INSTALL/../build/SCExV/script/install.pl -install_path $SNAPCRAFT_PART_INSTALL/SCExV/2_0/ -options randomForest 1 ncore 2 -server_user www-data
+      perl -I $SNAPCRAFT_PART_INSTALL/../../stefanslibs/build/Stefans_Libs_Essentials/lib $SNAPCRAFT_PART_INSTALL/../../stefanslibs/build/Stefans_Libs_Essentials/bin/code_refractor.pl -path $SNAPCRAFT_PART_INSTALL/SCExV/2_0/ -match '/home/stela2502/SCExV_snap/parts/scexv/install/' -replace '/'
+      mkdir -p $SNAPCRAFT_PART_INSTALL/etc/nginx/sites-available/
+      mkdir -p $SNAPCRAFT_PART_INSTALL/etc/nginx/sites-enabled/
+      cp $SNAPCRAFT_PART_INSTALL/SCExV/2_0/SCExV.nginx $SNAPCRAFT_PART_INSTALL/etc/nginx/sites-available/SCExV_2_0
+      cp $SNAPCRAFT_PART_INSTALL/SCExV/2_0/SCExV.nginx $SNAPCRAFT_PART_INSTALL/etc/nginx/sites-enabled/SCExV_2_0
+
+
+apps:
+  daemon1:
+    command: SCExV/2_0/SCExV.fastcgi.initd start
+    stop-command: SCExV/2_0/SCExV.fastcgi.initd stop
+    daemon: forking
+#    listen-stream: /SCExV/2_0/SCExV.socket
+#    socket: true
+
+
+#services:
+#  nginx:
+#    caps:
+#     - networking
+#     - network-service
+#    syscalls:
+#     - chown
+#     - chown32
+#     - close
+#     - setgid
+#    start: "./sbin/nginx"
+#    security-template: unconfined      
+
